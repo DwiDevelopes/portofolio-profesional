@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="icon/icon.png">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        .background-image.active {
+            opacity: 1;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .portfolio-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.98);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .portfolio-container:hover {
+            transform: scale(1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        
+        .portfolio-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .portfolio-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+        
+        .portfolio-header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .portfolio-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .profile-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .portfolio-body {
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: all 0.3s;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 45px 14px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.2);
+            background-color: white;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .portfolio-footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            font-size: 14px;
+            color: var(--dark-color);
+            opacity: 0.8;
+        }
+        
+        .portfolio-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .portfolio-footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        
+        .portfolio-footer a:hover {
+            color: var(--dark-color);
+        }
+        
+        .portfolio-footer a:hover::after {
+            width: 100%;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 5px;
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.5s;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-icon {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--primary-color);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus + .form-icon {
+            color: var(--dark-color);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--primary-color);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .password-toggle:hover {
+            opacity: 1;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        /* Portfolio Gallery Styles */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+        
+        /* Image Preview Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            margin-top: 5vh;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .close:hover {
+            color: var(--accent-color);
+        }
+        
+        .caption {
+            margin: 15px auto;
+            display: block;
+            width: 80%;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            font-size: 18px;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        @keyframes spin {
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+        
+        .btn.loading .spinner {
+            display: block;
+        }
+        
+        .btn.loading span {
+            opacity: 0.7;
+        }
+        
+        /* Skills Section */
+        .skills-list {
+            margin-top: 20px;
+        }
+        
+        .skill-item {
+            margin-bottom: 15px;
+        }
+        
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .skill-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #2980b9);
+            border-radius: 5px;
+            transition: width 1s ease-in-out;
+        }
+        
+        /* Contact Info */
+        .contact-info {
+            margin-top: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .portfolio-body {
+                flex-direction: column;
+            }
+            
+            .portfolio-section {
+                min-width: 100%;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background images -->
+    <div class="background-image active" id="bg1" style="background-image: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80&fit=max&crop=entropy&fm=jpg');"></div>
+    <div class="background-image" id="bg2"></div>
+    <div class="background-image" id="bg3"></div>
+    
+    <div class="container">
+        <div class="portfolio-container" id="portfolio-container">
+            <div class="portfolio-header">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-icon">
+                <h1>John Doe</h1>
+                <p>Web Developer & UI/UX Designer</p>
+            </div>
+            
+            <div class="portfolio-body">
+                <div class="portfolio-section">
+                    <h2 class="section-title">About Me</h2>
+                    <p>I'm a passionate web developer with 5+ years of experience creating beautiful, functional websites and applications. I specialize in front-end development with expertise in HTML, CSS, JavaScript, and modern frameworks.</p>
+                    
+                    <div class="skills-list">
+                        <h2 class="section-title">Skills</h2>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>HTML/CSS</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>JavaScript</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>React</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>UI/UX Design</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <h2 class="section-title">Contact</h2>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span>john.doe@example.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <span>+1 (555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <span>San Francisco, CA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="portfolio-section">
+                    <h2 class="section-title">Portfolio Gallery</h2>
+                    <div class="gallery" id="portfolio-gallery">
+                        <!-- Gallery items will be added dynamically -->
+                    </div>
+                    
+                    <h2 class="section-title" style="margin-top: 30px;">Contact Form</h2>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="contact-name">Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="contact-name" class="form-control" placeholder="Your name" required>
+                                <i class="fas fa-user form-icon"></i>
+                            </div>
+                            <div class="error-message" id="contact-name-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-email">Email</label>
+                            <div class="input-wrapper">
+                                <input type="email" id="contact-email" class="form-control" placeholder="Your email" required>
+                                <i class="fas fa-envelope form-icon"></i>
+                            </div>
+                            <div class="error-message" id="contact-email-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" class="form-control" rows="4" placeholder="Your message" required></textarea>
+                            <div class="error-message" id="contact-message-error"></div>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <span>Send Message</span>
+                            <div class="spinner"></div>
+                        </button>
+                        <div class="error-message" id="contact-error"></div>
+                        <div class="success-message" id="contact-success"></div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="portfolio-footer">
+                <p>© 2023 John Doe Portfolio. All rights reserved. | <a href="#" id="change-bg">Change Background</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Preview Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption" class="caption"></div>
+    </div>
+
+    <script>
+        // Portfolio images data
+        const portfolioItems = [
+            {
+                title: "E-commerce Website",
+                image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "A fully responsive e-commerce platform with shopping cart functionality."
+            },
+            {
+                title: "Mobile App UI",
+                image: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "Clean and intuitive mobile application user interface design."
+            },
+            {
+                title: "Dashboard Design",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "Analytics dashboard with interactive charts and data visualization."
+            },
+            {
+                title: "Brand Identity",
+                image: "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "Complete brand identity package including logo and style guide."
+            },
+            {
+                title: "Web Application",
+                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "Custom web application built with React and Node.js."
+            },
+            {
+                title: "Landing Page",
+                image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+                description: "High-conversion landing page for a SaaS product."
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contact-form');
+            const changeBgBtn = document.getElementById('change-bg');
+            const backgrounds = [
+                document.getElementById('bg1'),
+                document.getElementById('bg2'),
+                document.getElementById('bg3')
+            ];
+            let currentBg = 0;
+            
+            // Initialize gallery
+            const gallery = document.getElementById('portfolio-gallery');
+            portfolioItems.forEach(item => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <div class="overlay">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                gallery.appendChild(galleryItem);
+                
+                // Add click event for modal
+                galleryItem.addEventListener('click', function() {
+                    openModal(item.image, item.title, item.description);
+                });
+            });
+            
+            // Initialize modal functionality
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const captionText = document.getElementById('caption');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            
+            function openModal(imageSrc, title, description) {
+                modal.style.display = "block";
+                modalImg.src = imageSrc;
+                captionText.innerHTML = `<strong>${title}</strong><br>${description}`;
+            }
+            
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            // Change background image
+            changeBgBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                changeBackground();
+            });
+            
+            function changeBackground() {
+                backgrounds[currentBg].classList.remove('active');
+                currentBg = (currentBg + 1) % backgrounds.length;
+                backgrounds[currentBg].classList.add('active');
+            }
+            
+            // Contact form submission
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearErrors();
+                
+                const name = document.getElementById('contact-name').value;
+                const email = document.getElementById('contact-email').value;
+                const message = document.getElementById('contact-message').value;
+                const btn = this.querySelector('.btn');
+                
+                if (!name) {
+                    showError('contact-name-error', 'Name is required');
+                    return;
+                }
+                
+                if (!email) {
+                    showError('contact-email-error', 'Email is required');
+                    return;
+                }
+                
+                if (!isValidEmail(email)) {
+                    showError('contact-email-error', 'Please enter a valid email');
+                    return;
+                }
+                
+                if (!message) {
+                    showError('contact-message-error', 'Message is required');
+                    return;
+                }
+                
+                // Show loading state
+                btn.classList.add('loading');
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    showSuccess('contact-success', 'Message sent successfully! I will get back to you soon.');
+                    contactForm.reset();
+                    btn.classList.remove('loading');
+                }, 1500);
+            });
+            
+            function showError(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.style.display = 'block';
+                
+                const inputId = elementId.replace('-error', '');
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
+                }
+            }
+            
+            function showSuccess(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+            
+            function clearErrors() {
+                document.querySelectorAll('.error-message, .success-message').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                document.querySelectorAll('.form-control').forEach(input => {
+                    input.style.borderColor = '#ddd';
+                });
+            }
+            
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+            
+            // Set fallback background images
+            backgrounds[1].style.backgroundImage = 'url("https://images.unsplash.com/photo-1497366811353-6870744d04b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")';
+            backgrounds[2].style.backgroundImage = 'url("https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80")';
+        });
+    </script>
+</body>
+</html>
